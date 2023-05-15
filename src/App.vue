@@ -16,10 +16,13 @@
           </div>
 
           <div class="-mt-6 border-amber-200 border-4 px-4 py-4">
-              <label>Último usuário registrado:</label>
+              <label>Último usuário registrado: {{ users[users.length - 1].name }}</label>
               <div class="border-amber-200 border-4 px-20 py-20">
                 <ul>
-                    <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+                    <li v-for="user in users" :key="user.id">
+                        <input type="text" :value="user.name" @change="setUser($event.target.value, user.id)">
+                        <button @click="removerUser(user.id)" class="py-2 px-5 bg-red-500 rounded text-amber-100 hover:bg-red-700 hover:scale-105 hover:font-bold duration-300 transition ease-in-out mt-5" >Excluir</button>
+                    </li>
                 </ul>
               </div>
           </div>
@@ -31,7 +34,9 @@
 export default {
     name: 'App',
     data: () => ({
-        users: [],
+        users: [
+            { id: '', name: '',}
+        ],
         newUser: ''
     }),
     methods: {
@@ -42,6 +47,18 @@ export default {
           });
 
           console.log(this.users);
+        },
+        setUser(newName, id) {
+            this.users.map(user => {
+                if(user.id == id) {
+                    user[name] = newName;
+                }
+            })
+        },
+        removerUser(id) {
+            this.users = this.users.filter(user => {
+                return(user.id != id);
+            })
         }
     }
 }
